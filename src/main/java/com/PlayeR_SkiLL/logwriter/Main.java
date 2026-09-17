@@ -2,9 +2,8 @@ package com.PlayeR_SkiLL.logwriter;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
-import com.PlayeR_SkiLL.logwriter.commands.LogWriteCommand;
-import com.PlayeR_SkiLL.logwriter.commands.LogWriterCommand;
 import com.PlayeR_SkiLL.logwriter.commands.LwCommand;
+import com.PlayeR_SkiLL.logwriter.commands.LogWriterCommand;
 
 public class Main extends JavaPlugin {
 
@@ -15,7 +14,7 @@ public class Main extends JavaPlugin {
     public void onEnable() {
         instance = this;
 
-        // Сохраняем только messages.yml
+        // Сохраняем messages.yml
         saveResource("messages.yml", false);
         createLogFilesFolder();
 
