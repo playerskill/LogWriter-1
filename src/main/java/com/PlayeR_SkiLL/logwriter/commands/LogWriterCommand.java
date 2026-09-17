@@ -25,12 +25,14 @@ public class LogWriterCommand implements CommandExecutor {
             return false;
         }
         Player player = (Player) sender;
-        if (args.length == 0) {
+
+        if (args.length < 2) {
             player.sendMessage(plugin.getMessages().getString("usage"));
             return false;
         }
-        String message = String.join(" ", args);
-        String playerName = player.getName();
+
+        String filename = args[0];
+        String message = String.join(" ", java.util.Arrays.copyOfRange(args, 1, args.length));
 
         // Создаем папку logfiles, если не существует
         File logFolder = new File(plugin.getDataFolder(), "logfiles");
@@ -38,8 +40,8 @@ public class LogWriterCommand implements CommandExecutor {
             logFolder.mkdirs();
         }
 
-        // Создаем файл логов для игрока
-        File logFile = new File(logFolder, playerName + ".txt");
+        // Создаем файл логов для указанного файла
+        File logFile = new File(logFolder, filename + ".txt");
         try (FileWriter writer = new FileWriter(logFile, true)) {
             writer.write(message + "\n");
         } catch (IOException e) {
