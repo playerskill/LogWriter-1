@@ -1,0 +1,15 @@
+name: LogWriter
+version: 1.0
+main: com.yourdomain.logwriter.Main
+api-version: 1.12
+commands:
+  logwrite:
+    description: Записывает сообщение в лог-файл
+    usage: /<command> <название файла> <сообщение>
+    aliases: []
+  logwriter:
+    description: Управление плагином
+    usage: /<command> reload | create <название файла>
+  lw:
+    description: Алиас для /logwriter
+    usage: /lw
