@@ -48,7 +48,16 @@ public class LogWriterCommand implements CommandExecutor {
                 return true;
             }
             String filename = args[1] + ".yml";
-            File file = new File(plugin.getDataFolder(), "logfiles" + "/" + filename);
+
+            // Создаем папку logfiles, если её нет
+            File dir = new File(plugin.getDataFolder(), "logfiles");
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
+
+            // Создаем файл внутри папки logfiles
+            File file = new File(dir, filename);
+
             if (file.exists()) {
                 sender.sendMessage(getMessage("create_file_exists"));
             } else {
