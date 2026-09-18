@@ -26,13 +26,23 @@ public class LogWriterCommand implements CommandExecutor {
 
         String subCommand = args[0];
 
+        // Проверка прав для reload
         if (subCommand.equalsIgnoreCase("reload")) {
+            if (!sender.hasPermission("logwriter.reload")) {
+                sender.sendMessage("У вас нет прав для выполнения этой команды.");
+                return true;
+            }
             plugin.reloadConfig();
             sender.sendMessage(getMessage("reload_message"));
             return true;
         }
 
+        // Проверка прав для create
         if (subCommand.equalsIgnoreCase("create")) {
+            if (!sender.hasPermission("logwriter.create")) {
+                sender.sendMessage("У вас нет прав для выполнения этой команды.");
+                return true;
+            }
             if (args.length < 2) {
                 sender.sendMessage("Использование: /logwriter create <имя файла>");
                 return true;
