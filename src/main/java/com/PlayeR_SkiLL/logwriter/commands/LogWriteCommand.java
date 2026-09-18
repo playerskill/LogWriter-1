@@ -35,11 +35,13 @@ public class LogWriteCommand implements CommandExecutor {
         String message = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
         File logFile = new File(plugin.getDataFolder(), "logfiles" + "/" + filename);
 
+        // Проверка существования файла
         if (!logFile.exists()) {
             sender.sendMessage("Файл не существует: " + filename);
             return true;
         }
 
+        // Запись сообщения в файл
         try (FileWriter fw = new FileWriter(logFile, true)) {
             fw.write(message + "\n");
         } catch (IOException e) {
