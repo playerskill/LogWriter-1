@@ -1,56 +1,66 @@
-package com.PlayeR_SkiLL.logwriter.commands;
+package com.PlayeR_SkiLL.LogWriter.commands;
 
+import com.PlayeR_SkiLL.LogWriter.LogWriter;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import com.PlayeR_SkiLL.logwriter.Main;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 
 public class LogWriterCommand implements CommandExecutor {
 
-    private Main plugin;
+    private final LogWriter plugin;
 
-    public LogWriterCommand() {
-        plugin = Main.getInstance();
+    public LogWriterCommand(LogWriter plugin) {
+        this.plugin = plugin;
     }
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (!(sender instanceof Player)) {
-            sender.sendMessage("Эта команда только для игроков");
-            return false;
-        }
-        Player player = (Player) sender;
-
-        if (args.length < 2) {
-            player.sendMessage(plugin.getMessages().getString("usage"));
-            return false;
+        if (args.length == 0) {
+            // Сообщение, которое всегда отображается
+            sender.sendMessage("&f[&aLogWriter&f] &7Простой плагин от &6PlayeR_SkiLL &7для логирования действий.");
+            return true;
         }
 
-        String filename = args[0];
-        String message = String.join(" ", java.util.Arrays.copyOfRange(args, 1, args.length));
+        String subCommand = args[0];
 
-        // Создаем папку logfiles, если не существует
-        File logFolder = new File(plugin.getDataFolder(), "logfiles");
-        if (!logFolder.exists()) {
-            logFolder.mkdirs();
+        if (subCommand.equalsIgnoreCase("reload")) {
+            plugin.reloadConfig();
+            sender.sendMessage(getMessage("reload_message"));
+            return true;
         }
 
-        // Создаем файл логов для указанного файла
-        File logFile = new File(logFolder, filename + ".txt");
-        try (FileWriter writer = new FileWriter(logFile, true)) {
-            writer.write(message + "\n");
-        } catch (IOException e) {
-            e.printStackTrace();
-            player.sendMessage(plugin.getMessages().getString("error_writing_log"));
-            return false;
+        if (subCommand.equalsIgnoreCase("create")) {
+            if (args.length < 2) {
+                sender.sendMessage("Использование: /logwriter create <имя файла>");
+                return true;
+            }
+            String filename = args[1] + ".yml";
+            File file = new File(plugin.getDataFolder(), "logfiles" + "/" + filename);
+            if (file.exists()) {
+                sender.sendMessage(getMessage("create_file_exists"));
+            } else {
+                try {
+                    if (file.createNewFile()) {
+                        sender.sendMessage(getMessage("create_file_success").replace("%file%", filename));
+                    } else {
+                        sender.sendMessage("Ошибка при создании файла");
+                    }
+                } catch (IOException e) {
+                    sender.sendMessage(getMessage("create_error").replace("%error%", e.getMessage()));
+                }
+            }
+            return true;
         }
 
-        player.sendMessage(plugin.getMessages().getString("log_written"));
+        sender.sendMessage("Неизвестная команда. Используйте /logwriter reload | create <имя>");
         return true;
+    }
+
+    private String getMessage(String key) {
+        String msg = plugin.getConfig().getString(key, "");
+        return msg.replaceAll("&", "§");
     }
 }
