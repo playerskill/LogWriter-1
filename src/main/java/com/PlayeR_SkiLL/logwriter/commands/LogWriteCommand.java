@@ -20,6 +20,12 @@ public class LogWriteCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        // Проверка прав
+        if (!sender.hasPermission("logwrite.use")) {
+            sender.sendMessage("У вас нет прав для использования этой команды.");
+            return true;
+        }
+
         if (args.length < 2) {
             sender.sendMessage("Использование: /logwrite <имя_файла.yml> <сообщение>");
             return true;
