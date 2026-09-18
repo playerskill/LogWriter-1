@@ -1,39 +1,45 @@
-package com.Player_SkiLL.logwriter.commands;
+package com.PlayeR_SkiLL.LogWriter.commands;
 
+import com.PlayeR_SkiLL.LogWriter.LogWriter;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import com.Player_SkiLL.logwriter.Main;
-import com.Player_SkiLL.logwriter.utils.FileUtils;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class LogWriteCommand implements CommandExecutor {
 
+    private final LogWriter plugin;
+
+    public LogWriteCommand(LogWriter plugin) {
+        this.plugin = plugin;
+    }
+
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (!(sender instanceof Player)) {
-            sender.sendMessage("Этот команду можно использовать только в игре.");
-            return true;
-        }
         if (args.length < 2) {
-            sender.sendMessage("Использование: /logwrite <имя файла> <сообщение>");
+            sender.sendMessage("Использование: /logwrite <имя_файла.yml> <сообщение>");
             return true;
         }
 
         String filename = args[0];
-        String message = String.join(" ", java.util.Arrays.copyOfRange(args, 1, args.length));
+        String message = String.join(" ", args, 1, args.length);
+        File logFile = new File(plugin.getDataFolder(), "logfiles" + "/" + filename);
 
-        java.io.File logFolder = new java.io.File(Main.getInstance().getDataFolder(), "logfiles");
-        java.io.File file = new java.io.File(logFolder, filename);
-
-        try {
-            FileUtils.appendLine(file, message);
-            sender.sendMessage("Сообщение записано в файл: " + filename);
-        } catch (Exception e) {
-            sender.sendMessage("Произошла ошибка при записи файла.");
-            e.printStackTrace();
+        if (!logFile.exists()) {
+            sender.sendMessage("Файл не существует: " + filename);
+            return true;
         }
 
+        try (FileWriter fw = new FileWriter(logFile, true)) {
+            fw.write(message + "\n");
+        } catch (IOException e) {
+            sender.sendMessage("Ошибка записи файла: " + e.getMessage());
+        }
+
+        sender.sendMessage("Сообщение добавлено в " + filename);
         return true;
     }
 }
