@@ -8,6 +8,7 @@ public class LogWriter extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        saveDefaultConfig(); // Создаст messages.yml, если его еще нет
         getLogger().info("LogWriter включен!");
 
         // Создаем папки при запуске
