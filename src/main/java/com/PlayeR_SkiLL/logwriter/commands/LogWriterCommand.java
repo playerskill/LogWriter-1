@@ -52,7 +52,12 @@ public class LogWriterCommand implements CommandExecutor {
             // Создаем папку logfiles, если её нет
             File dir = new File(plugin.getDataFolder(), "logfiles");
             if (!dir.exists()) {
-                dir.mkdirs();
+                boolean created = dir.mkdirs();
+                if (created) {
+                    System.out.println("[LogWriter] Папка logfiles успешно создана");
+                } else {
+                    System.out.println("[LogWriter] Не удалось создать папку logfiles");
+                }
             }
 
             // Создаем файл внутри папки logfiles
