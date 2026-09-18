@@ -13,8 +13,13 @@ public class LogWriter extends JavaPlugin {
         // Создаем папки при запуске
         createLogFolder();
 
-        // Регистрация команд и других инициализаций
-        // например: getCommand("logwriter").setExecutor(new LogWriterCommand(this));
+        // Регистрация команд
+        if (getCommand("logwrite") != null) {
+            getCommand("logwrite").setExecutor(new LogWriteCommand(this));
+        }
+        if (getCommand("logwriter") != null) {
+            getCommand("logwriter").setExecutor(new LogWriterCommand(this));
+        }
     }
 
     @Override
