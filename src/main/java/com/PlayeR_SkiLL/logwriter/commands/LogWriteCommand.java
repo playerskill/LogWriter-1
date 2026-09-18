@@ -8,6 +8,7 @@ import org.bukkit.command.CommandSender;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Arrays;
 
 public class LogWriteCommand implements CommandExecutor {
 
@@ -25,7 +26,7 @@ public class LogWriteCommand implements CommandExecutor {
         }
 
         String filename = args[0];
-        String message = String.join(" ", args, 1, args.length);
+        String message = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
         File logFile = new File(plugin.getDataFolder(), "logfiles" + "/" + filename);
 
         if (!logFile.exists()) {
