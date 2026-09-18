@@ -10,3 +10,16 @@ commands:
     description: Управление плагином
     aliases: [lw]
     usage: /logwriter [reload|create <filename>]
+permissions:
+  logwrite.use:
+    description: Разрешение на использование команды /logwrite
+    default: op
+  logwriter.use:
+    description: Разрешение на использование команды /logwriter
+    default: op
+  logwriter.reload:
+    description: Разрешение на перезагрузку конфигурации
+    default: op
+  logwriter.create:
+    description: Разрешение на создание новых лог-файлов
+    default: op
